@@ -1,0 +1,186 @@
+import os
+import logging
+import numpy as np
+
+
+class DummySpace:
+    """Minimal stub for action_space and observation_space."""
+    def __init__(self, n):
+        self.n = n
+
+
+class NumPyModel:
+    """
+    Lightweight 2-layer NumPy brain for Pwnagotchi.
+
+    Exploration-focused version:
+      - stronger AP-memory penalty
+      - stronger per-AP deauth penalty
+      - reduced handshake reward
+      - reduced hop penalty
+      - increased association penalty
+      - lower learning rate for stability
+    """
+
+    def __init__(self, env, nn_path, gentle=True):
+        self.env = env
+        self.nn_path = nn_path
+        self.gentle = gentle
+
+        self.input_size = 64
+        self.hidden_size = 16
+
+        # Lower learning rate for stability on Pi Zero
+        self.lr = 0.0002 if gentle else 0.001
+
+        # Minimal spaces
+        self.action_space = DummySpace(2)
+        self.observation_space = DummySpace(self.input_size)
+        self.policy = None
+        self.n_steps = 1
+
+        # Per-AP memory (lightweight)
+        self.ap_memory = {}
+
+        # Load or init weights
+        if os.path.exists(nn_path):
+            try:
+                data = np.load(nn_path, allow_pickle=True).item()
+                self.W1 = data.get(
+                    "W1",
+                    np.random.randn(self.hidden_size, self.input_size).astype(np.float32) * 0.01,
+                )
+                self.W2 = data.get(
+                    "W2",
+                    np.random.randn(1, self.hidden_size).astype(np.float32) * 0.01,
+                )
+                logging.info("[ai] loaded NumPy brain from %s", nn_path)
+            except Exception as e:
+                logging.warning("[ai] failed to load brain.nn (%s), initializing random weights", e)
+                self._init_weights()
+        else:
+            self._init_weights()
+
+    def _init_weights(self):
+        self.W1 = np.random.randn(self.hidden_size, self.input_size).astype(np.float32) * 0.01
+        self.W2 = np.random.randn(1, self.hidden_size).astype(np.float32) * 0.01
+
+    def _prepare_obs(self, obs):
+        obs = np.asarray(obs, dtype=np.float32)
+        if obs.shape[0] < self.input_size:
+            obs = np.pad(obs, (0, self.input_size - obs.shape[0]))
+        elif obs.shape[0] > self.input_size:
+            obs = obs[:self.input_size]
+        return obs
+
+    def _forward(self, x):
+        h = np.maximum(0, self.W1 @ x)          # ReLU
+        score = float(self.W2 @ h)             # scalar
+        return h, score
+
+    def predict(self, obs):
+        try:
+            x = self._prepare_obs(obs)
+            h, score = self._forward(x)
+
+            # Simple per-channel bias from AP memory
+            data = self.env.data()
+            current_channel = int(data.get("channel", 0))
+            heavy_encounters = sum(
+                1
+                for ap in self.ap_memory.values()
+                if ap["last_channel"] == current_channel and ap["encounters"] > 10
+            )
+            score -= 2.0 * heavy_encounters   # stronger penalty
+
+            # Per-AP deauth penalty (stronger)
+            for ap in self.ap_memory.values():
+                score -= 1.0 * ap.get("deauths", 0)
+
+            action = int(score > 0.0)
+            return action, None
+        except Exception as e:
+            logging.warning("[ai] predict failed (%s), defaulting to action 0", e)
+            return 0, None
+
+    def _update_ap_memory(self, data):
+        aps = data.get("aps", [])
+        for ap in aps:
+            bssid = ap.get("bssid")
+            if not bssid:
+                continue
+            entry = self.ap_memory.get(
+                bssid,
+                {"encounters": 0, "last_channel": ap.get("channel", 0), "deauths": 0},
+            )
+            entry["encounters"] += 1
+            entry["last_channel"] = ap.get("channel", entry["last_channel"])
+            self.ap_memory[bssid] = entry
+
+    def _shaped_reward(self, data):
+        handshakes = data.get("handshakes", 0)
+        deauths = data.get("deauths", 0)
+        assocs = data.get("assocs", 0)
+        hops = data.get("hops", 0)
+        inactive = data.get("inactive", 0)
+
+        # Exploration-focused tuning
+        R_hs = 1.5       # reduced handshake reward
+        R_deauth = 0.5   # stronger penalty
+        R_assoc = 0.1    # stronger penalty
+        R_hop = 0.01     # reduced penalty (encourage exploration)
+        R_inactive = 0.05
+
+        return (
+            handshakes * R_hs
+            - deauths * R_deauth
+            - assocs * R_assoc
+            - hops * R_hop
+            - inactive * R_inactive
+        )
+
+    def _update_weights(self, reward, x, h):
+        # Very cheap, heuristic "gradient" nudge
+        grad_W2 = reward * h
+        mask = (h > 0).astype(np.float32)
+        grad_W1 = reward * np.outer(mask, x)
+
+        self.W2 += self.lr * grad_W2
+        self.W1 += self.lr * grad_W1
+
+    def learn(self, total_timesteps=1, callback=None):
+        obs = self.env.reset()
+        for t in range(total_timesteps):
+            data = self.env.data()
+            self._update_ap_memory(data)
+
+            shaped_reward = self._shaped_reward(data)
+            self.env.last_reward = shaped_reward
+
+            x = self._prepare_obs(obs)
+            h, _ = self._forward(x)
+
+            action, _ = self.predict(obs)
+            obs, reward, done, info = self.env.step(action)
+
+            self._update_weights(shaped_reward, x, h)
+
+            if callback is not None:
+                try:
+                    callback(locals(), globals())
+                except Exception as e:
+                    logging.debug("[ai] callback error (%s)", e)
+
+            if done:
+                obs = self.env.reset()
+
+        return obs
+
+    def save(self, path=None):
+        try:
+            data = {"W1": self.W1, "W2": self.W2}
+            np.save(self.nn_path, data)
+            logging.info("[ai] saved NumPy brain to %s", self.nn_path)
+        except Exception as e:
+            logging.warning("[ai] failed to save brain.nn (%s)", e)
+

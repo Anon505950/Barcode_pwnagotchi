@@ -1,0 +1,107 @@
+import os
+import logging
+import numpy as np
+
+
+class DummySpace:
+    """Minimal stub for action_space and observation_space."""
+    def __init__(self, n):
+        self.n = n
+
+
+class NumPyModel:
+    """
+    Safe NumPy-based replacement for Stable-Baselines A2C.
+
+    Provides:
+      - env
+      - predict(obs)
+      - learn(total_timesteps, callback)
+      - save(path)
+
+    Plus minimal A2C stubs so AsyncTrainer works.
+    """
+
+    def __init__(self, env, nn_path, gentle=True):
+        self.env = env
+        self.nn_path = nn_path
+        self.gentle = gentle
+
+        # Load or initialize weights
+        if os.path.exists(nn_path):
+            try:
+                self.weights = np.load(nn_path)
+                logging.info("[ai] loaded NumPy brain from %s", nn_path)
+            except Exception as e:
+                logging.warning("[ai] failed to load brain.nn (%s), initializing zeros", e)
+                self.weights = np.zeros(64, dtype=np.float32)
+        else:
+            self.weights = np.zeros(64, dtype=np.float32)
+
+        # Gentle learning rate
+        self.lr = 0.001 if gentle else 0.01
+
+        # Minimal A2C stubs
+        self.action_space = DummySpace(2)       # two actions: 0 or 1
+        self.observation_space = DummySpace(64) # padded/truncated obs length
+        self.policy = None
+        self.n_steps = 1
+
+    def _prepare_obs(self, obs):
+        """Pad or trim observation to match weight length."""
+        obs = np.asarray(obs, dtype=np.float32)
+        if obs.shape[0] < self.weights.shape[0]:
+            obs = np.pad(obs, (0, self.weights.shape[0] - obs.shape[0]))
+        elif obs.shape[0] > self.weights.shape[0]:
+            obs = obs[:self.weights.shape[0]]
+        return obs
+
+    def predict(self, obs):
+        """Simple linear policy: dot(weights, obs) > 0 → action 1."""
+        try:
+            obs = self._prepare_obs(obs)
+            score = np.dot(self.weights, obs)
+            action = int(score > 0.0)
+            return action, None
+        except Exception as e:
+            logging.warning("[ai] predict failed (%s), defaulting to action 0", e)
+            return 0, None
+
+    def learn(self, total_timesteps=1, callback=None):
+        """
+        Minimal training loop compatible with AsyncTrainer.
+
+        Steps the environment, calls callback, updates weights gently.
+        """
+        obs = self.env.reset()
+        for t in range(total_timesteps):
+            # Predict action
+            action, _ = self.predict(obs)
+
+            # Step environment
+            obs, reward, done, info = self.env.step(action)
+
+            # Gentle weight update
+            self.weights += self.lr * reward
+
+            # Callback for trainer UI
+            if callback is not None:
+                try:
+                    callback(locals(), globals())
+                except Exception as e:
+                    logging.debug("[ai] callback error (%s)", e)
+
+            # Reset if episode ends
+            if done:
+                obs = self.env.reset()
+
+        return obs
+
+    def save(self, path=None):
+        """Save weights to nn_path."""
+        try:
+            np.save(self.nn_path, self.weights)
+            logging.info("[ai] saved NumPy brain to %s", self.nn_path)
+        except Exception as e:
+            logging.warning("[ai] failed to save brain.nn (%s)", e)
+
