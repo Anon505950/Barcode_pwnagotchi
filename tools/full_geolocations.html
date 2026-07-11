@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Combined WiFi Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+  body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+  #header {
+      background: #222;
+      color: #fff;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+  }
+  #searchBox {
+      padding: 6px 10px;
+      font-size: 16px;
+      width: 300px;
+  }
+  #map { height: calc(100vh - 50px); width: 100%; }
+</style>
+</head>
+
+<body>
+<div id="header">
+    <span style="font-size:18px; font-weight:bold;">Combined WiFi Map</span>
+    <input id="searchBox" type="text" placeholder="Search SSID or BSSID...">
+    <span id="markerCount">Total markers: 0</span>
+</div>
+
+<div id="map"></div>
+
+<script>
+var map = L.map('map').setView([40.44, -79.99], 12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+}).addTo(map);
+
+var allMarkers = [];
+
+        var m = L.marker([40.42783737, -79.97895812]).addTo(map).bindPopup("SSID: TMOBILEE4D5<br>BSSID: c0:d7:aa:f4:e4:d7<br>40.42783737, -79.97895812");
+        m.ssid = "TMOBILEE4D5";
+        m.bssid = "c0:d7:aa:f4:e4:d7";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42792892, -79.97892761]).addTo(map).bindPopup("SSID: TMOBILEE4D5<br>BSSID: c0:d7:aa:f4:e4:d7<br>40.42792892, -79.97892761");
+        m.ssid = "TMOBILEE4D5";
+        m.bssid = "c0:d7:aa:f4:e4:d7";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42736434, -79.98636627]).addTo(map).bindPopup("SSID: Sun24<br>BSSID: fa:d0:0e:a5:3d:e1<br>40.42736434, -79.98636627");
+        m.ssid = "Sun24";
+        m.bssid = "fa:d0:0e:a5:3d:e1";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.39286422, -79.99356842]).addTo(map).bindPopup("SSID: DIRECTE0HPDeskJet4200series<br>BSSID: 5c:60:ba:71:de:e1<br>40.39286422, -79.99356842");
+        m.ssid = "DIRECTE0HPDeskJet4200series";
+        m.bssid = "5c:60:ba:71:de:e1";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42104721, -79.99995422]).addTo(map).bindPopup("SSID: LewisFamilyNetwork<br>BSSID: 96:04:e3:cf:7c:59<br>40.42104721, -79.99995422");
+        m.ssid = "LewisFamilyNetwork";
+        m.bssid = "96:04:e3:cf:7c:59";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42213439, -79.99743652]).addTo(map).bindPopup("SSID: Verizon39DDNZ<br>BSSID: 58:96:71:0c:fb:3e<br>40.42213439, -79.99743652");
+        m.ssid = "Verizon39DDNZ";
+        m.bssid = "58:96:71:0c:fb:3e";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.41774749, -79.98719787]).addTo(map).bindPopup("SSID: NoWiFiforyou<br>BSSID: 58:96:71:4d:69:a0<br>40.41774749, -79.98719787");
+        m.ssid = "NoWiFiforyou";
+        m.bssid = "58:96:71:4d:69:a0";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.4239273, -80.0017395]).addTo(map).bindPopup("SSID: VerizonF9BYX4<br>BSSID: 78:67:0e:6d:39:42<br>40.4239273, -80.0017395");
+        m.ssid = "VerizonF9BYX4";
+        m.bssid = "78:67:0e:6d:39:42";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.4248619, -79.98480224]).addTo(map).bindPopup("SSID: Fios7GrPb<br>BSSID: b8:f8:53:9c:bf:72<br>40.4248619, -79.98480224");
+        m.ssid = "Fios7GrPb";
+        m.bssid = "b8:f8:53:9c:bf:72";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42994689, -80.02473449]).addTo(map).bindPopup("SSID: BogusBinted<br>BSSID: 12:36:aa:74:a1:b9<br>40.42994689, -80.02473449");
+        m.ssid = "BogusBinted";
+        m.bssid = "12:36:aa:74:a1:b9";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42178726, -79.99296569]).addTo(map).bindPopup("SSID: HilltopRX<br>BSSID: 84:78:48:3c:b0:05<br>40.42178726, -79.99296569");
+        m.ssid = "HilltopRX";
+        m.bssid = "84:78:48:3c:b0:05";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42451858, -80.00228881]).addTo(map).bindPopup("SSID: FriendlyNeighborhoodSpiderLAN<br>BSSID: a0:ff:70:02:b3:53<br>40.42451858, -80.00228881");
+        m.ssid = "FriendlyNeighborhoodSpiderLAN";
+        m.bssid = "a0:ff:70:02:b3:53";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42487716, -80.0017395]).addTo(map).bindPopup("SSID: AmpliFi<br>BSSID: 80:d0:4a:42:94:c6<br>40.42487716, -80.0017395");
+        m.ssid = "AmpliFi";
+        m.bssid = "80:d0:4a:42:94:c6";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42420196, -80.0020523]).addTo(map).bindPopup("SSID: VerizonLRJV9T<br>BSSID: 24:41:fe:01:5e:50<br>40.42420196, -80.0020523");
+        m.ssid = "VerizonLRJV9T";
+        m.bssid = "24:41:fe:01:5e:50";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42965316, -80.02455902]).addTo(map).bindPopup("SSID: Lopez<br>BSSID: f4:0e:83:d7:58:54<br>40.42965316, -80.02455902");
+        m.ssid = "Lopez";
+        m.bssid = "f4:0e:83:d7:58:54";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.99808502, -80.37382507]).addTo(map).bindPopup("SSID: FBISURVEILLANCEVAN<br>BSSID: 64:67:72:23:7a:c9<br>40.99808502, -80.37382507");
+        m.ssid = "FBISURVEILLANCEVAN";
+        m.bssid = "64:67:72:23:7a:c9";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.39321899, -79.99387359]).addTo(map).bindPopup("SSID: FiOSQUWGW<br>BSSID: 04:a2:22:d1:57:83<br>40.39321899, -79.99387359");
+        m.ssid = "FiOSQUWGW";
+        m.bssid = "04:a2:22:d1:57:83";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42160797, -79.99475098]).addTo(map).bindPopup("SSID: VerizonNBJSZ4<br>BSSID: 58:96:71:1C:23:79<br>40.42160797, -79.99475098");
+        m.ssid = "VerizonNBJSZ4";
+        m.bssid = "58:96:71:1C:23:79";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42167663, -79.99509429]).addTo(map).bindPopup("SSID: VerizonNBJSZ4<br>BSSID: 58:96:71:1C:23:79<br>40.42167663, -79.99509429");
+        m.ssid = "VerizonNBJSZ4";
+        m.bssid = "58:96:71:1C:23:79";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.99875259, -80.3742752]).addTo(map).bindPopup("SSID: TheGhouse<br>BSSID: 1e:9d:72:07:7e:af<br>40.99875259, -80.3742752");
+        m.ssid = "TheGhouse";
+        m.bssid = "1e:9d:72:07:7e:af";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42404937, -80.00154876]).addTo(map).bindPopup("SSID: FiospyF7N<br>BSSID: b8:f8:53:c1:be:76<br>40.42404937, -80.00154876");
+        m.ssid = "FiospyF7N";
+        m.bssid = "b8:f8:53:c1:be:76";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.39300155, -79.9936676]).addTo(map).bindPopup("SSID: lucina2iot<br>BSSID: 82:67:0e:c5:66:30<br>40.39300155, -79.9936676");
+        m.ssid = "lucina2iot";
+        m.bssid = "82:67:0e:c5:66:30";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42420196, -80.00189971]).addTo(map).bindPopup("SSID: VerizonX3JVXT<br>BSSID: ac:91:9b:d8:e4:fa<br>40.42420196, -80.00189971");
+        m.ssid = "VerizonX3JVXT";
+        m.bssid = "ac:91:9b:d8:e4:fa";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.39292907, -79.99361419]).addTo(map).bindPopup("SSID: VerizonJJSH7DIoT<br>BSSID: 94:98:8f:08:91:17<br>40.39292907, -79.99361419");
+        m.ssid = "VerizonJJSH7DIoT";
+        m.bssid = "94:98:8f:08:91:17";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.43053054, -79.97621154]).addTo(map).bindPopup("SSID: FiosQNZh7<br>BSSID: 6a:d7:9a:03:19:50<br>40.43053054, -79.97621154");
+        m.ssid = "FiosQNZh7";
+        m.bssid = "6a:d7:9a:03:19:50";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42449951, -80.00191497]).addTo(map).bindPopup("SSID: Verizon6QJ7JP<br>BSSID: 74:90:bc:71:fb:8a<br>40.42449951, -80.00191497");
+        m.ssid = "Verizon6QJ7JP";
+        m.bssid = "74:90:bc:71:fb:8a";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42947006, -79.9760437]).addTo(map).bindPopup("SSID: thepalace<br>BSSID: 12:36:aa:7e:df:39<br>40.42947006, -79.9760437");
+        m.ssid = "thepalace";
+        m.bssid = "12:36:aa:7e:df:39";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42420196, -80.0017929]).addTo(map).bindPopup("SSID: penguino<br>BSSID: 70:54:25:49:98:ea<br>40.42420196, -80.0017929");
+        m.ssid = "penguino";
+        m.bssid = "70:54:25:49:98:ea";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.43092727, -79.97546386]).addTo(map).bindPopup("SSID: GreycourtEmployee<br>BSSID: 9c:05:d6:56:ee:cb<br>40.43092727, -79.97546386");
+        m.ssid = "GreycourtEmployee";
+        m.bssid = "9c:05:d6:56:ee:cb";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42402267, -80.00180053]).addTo(map).bindPopup("SSID: FiosCmZ2H<br>BSSID: b8:f8:53:6a:e4:e2<br>40.42402267, -80.00180053");
+        m.ssid = "FiosCmZ2H";
+        m.bssid = "b8:f8:53:6a:e4:e2";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.39295196, -79.99359893]).addTo(map).bindPopup("SSID: FBISurveillanceVan<br>BSSID: 78:f2:9e:6d:ce:48<br>40.39295196, -79.99359893");
+        m.ssid = "FBISurveillanceVan";
+        m.bssid = "78:f2:9e:6d:ce:48";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.43041229, -79.97673797]).addTo(map).bindPopup("SSID: hidden<br>BSSID: a8:29:48:1c:69:fd<br>40.43041229, -79.97673797");
+        m.ssid = "hidden";
+        m.bssid = "a8:29:48:1c:69:fd";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.43048095, -79.97696685]).addTo(map).bindPopup("SSID: hidden<br>BSSID: bc:9f:e4:ad:d9:82<br>40.43048095, -79.97696685");
+        m.ssid = "hidden";
+        m.bssid = "bc:9f:e4:ad:d9:82";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42412567, -80.00165557]).addTo(map).bindPopup("SSID: LGRefrigerator5670<br>BSSID: a6:36:c7:69:56:70<br>40.42412567, -80.00165557");
+        m.ssid = "LGRefrigerator5670";
+        m.bssid = "a6:36:c7:69:56:70";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.43029022, -79.9759674]).addTo(map).bindPopup("SSID: Apt3<br>BSSID: 12:36:aa:8a:49:49<br>40.43029022, -79.9759674");
+        m.ssid = "Apt3";
+        m.bssid = "12:36:aa:8a:49:49";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42425155, -80.00197601]).addTo(map).bindPopup("SSID: VerizonJC6TVM<br>BSSID: 78:67:0e:3e:bb:bf<br>40.42425155, -80.00197601");
+        m.ssid = "VerizonJC6TVM";
+        m.bssid = "78:67:0e:3e:bb:bf";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.16886139, -80.27467346]).addTo(map).bindPopup("SSID: AudiMMI9254<br>BSSID: 74:6F:F7:BA:D1:06<br>40.16886139, -80.27467346");
+        m.ssid = "AudiMMI9254";
+        m.bssid = "74:6F:F7:BA:D1:06";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.43022537, -79.97637176]).addTo(map).bindPopup("SSID: GLWSecure<br>BSSID: 80:2a:a8:17:7f:74<br>40.43022537, -79.97637176");
+        m.ssid = "GLWSecure";
+        m.bssid = "80:2a:a8:17:7f:74";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.41758346, -79.98732757]).addTo(map).bindPopup("SSID: TMOBILEBC60<br>BSSID: 34:19:4d:b2:bb:44<br>40.41758346, -79.98732757");
+        m.ssid = "TMOBILEBC60";
+        m.bssid = "34:19:4d:b2:bb:44";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42198944, -79.99140167]).addTo(map).bindPopup("SSID: AMP<br>BSSID: 1c:6a:1b:92:c9:b8<br>40.42198944, -79.99140167");
+        m.ssid = "AMP";
+        m.bssid = "1c:6a:1b:92:c9:b8";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.4175148, -79.98723602]).addTo(map).bindPopup("SSID: TMOBILEBC60<br>BSSID: 18:a5:ff:7f:bc:62<br>40.4175148, -79.98723602");
+        m.ssid = "TMOBILEBC60";
+        m.bssid = "18:a5:ff:7f:bc:62";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.41783142, -79.98784637]).addTo(map).bindPopup("SSID: TMOBILE7986<br>BSSID: ac:df:9f:3c:79:88<br>40.41783142, -79.98784637");
+        m.ssid = "TMOBILE7986";
+        m.bssid = "ac:df:9f:3c:79:88";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.39301681, -79.99381256]).addTo(map).bindPopup("SSID: lucina2<br>BSSID: 78:67:0e:c5:66:30<br>40.39301681, -79.99381256");
+        m.ssid = "lucina2";
+        m.bssid = "78:67:0e:c5:66:30";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42786407, -79.9808197]).addTo(map).bindPopup("SSID: ATTWIFI4007<br>BSSID: 08:33:ed:c6:35:01<br>40.42786407, -79.9808197");
+        m.ssid = "ATTWIFI4007";
+        m.bssid = "08:33:ed:c6:35:01";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.99894332, -80.37365722]).addTo(map).bindPopup("SSID: sank22<br>BSSID: ac:df:9f:17:4e:f6<br>40.99894332, -80.37365722");
+        m.ssid = "sank22";
+        m.bssid = "ac:df:9f:17:4e:f6";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.4299736, -79.97618103]).addTo(map).bindPopup("SSID: FiosLv5sC<br>BSSID: b8:f8:53:0d:6b:0f<br>40.4299736, -79.97618103");
+        m.ssid = "FiosLv5sC";
+        m.bssid = "b8:f8:53:0d:6b:0f";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42456054, -80.00092315]).addTo(map).bindPopup("SSID: ASN1251972EXT<br>BSSID: 9a:32:b1:3c:d2:44<br>40.42456054, -80.00092315");
+        m.ssid = "ASN1251972EXT";
+        m.bssid = "9a:32:b1:3c:d2:44";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.43024063, -79.9764862]).addTo(map).bindPopup("SSID: BoostSouthside<br>BSSID: 60:3d:26:7a:e9:ce<br>40.43024063, -79.9764862");
+        m.ssid = "BoostSouthside";
+        m.bssid = "60:3d:26:7a:e9:ce";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.42142486, -79.99204254]).addTo(map).bindPopup("SSID: Tat2Momma<br>BSSID: 88:9e:68:f2:00:49<br>40.42142486, -79.99204254");
+        m.ssid = "Tat2Momma";
+        m.bssid = "88:9e:68:f2:00:49";
+        allMarkers.push(m);
+        
+        var m = L.marker([40.41798782, -79.98661041]).addTo(map).bindPopup("SSID: CastleBallard<br>BSSID: bc:07:1d:23:ee:d6<br>40.41798782, -79.98661041");
+        m.ssid = "CastleBallard";
+        m.bssid = "bc:07:1d:23:ee:d6";
+        allMarkers.push(m);
+        
+// Update marker count
+document.getElementById("markerCount").innerText = "Total markers: " + allMarkers.length;
+
+// Search filtering
+document.getElementById("searchBox").addEventListener("input", function() {
+    var q = this.value.toLowerCase();
+
+    allMarkers.forEach(function(m) {
+        var match = m.ssid.toLowerCase().includes(q) ||
+                    m.bssid.toLowerCase().includes(q);
+
+        if (match || q === "") {
+            if (!map.hasLayer(m)) map.addLayer(m);
+        } else {
+            if (map.hasLayer(m)) map.removeLayer(m);
+        }
+    });
+});
+</script>
+</body>
+</html>
