@@ -5,7 +5,7 @@ main.whitelist = [
 ]
 main.plugins.grid.enabled = true
 main.plugins.grid.report = true
-main.plugins.grid.exclude = [ "McLaren",]
+main.plugins.grid.exclude = [ "Whitelist",]
 
 main.plugins.bt-tether.enabled = true
 main.plugins.bt-tether.devices.android-phone.enabled = false
