@@ -1,9 +1,7 @@
 main.name = "barcode"
 main.lang = "en"
 main.whitelist = [
- "McLaren",
- "foo",
- "iPhone",
+ "whitelist",
 ]
 main.plugins.grid.enabled = true
 main.plugins.grid.report = true
